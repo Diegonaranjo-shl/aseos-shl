@@ -579,26 +579,47 @@ function renderPagosClientes() {
 }
 
 function renderOperarias() {
-  const operarias = ['Angie','Marlin','Sofia','Juanita','Laura','Yurani','Wilfer'];
+  // Cargar datos de operarias (nombre + WhatsApp guardados en localStorage)
+  function cargarOperarias() {
+    const base = ['Angie','Marlin','Sofia','Juanita','Laura','Yurani','Wilfer'];
+    try {
+      const saved = JSON.parse(localStorage.getItem('shl_operarias') || '[]');
+      return base.map(n => {
+        const found = saved.find(o => o.nombre === n);
+        return { nombre: n, telefono: found ? found.telefono : '' };
+      });
+    } catch(e) { return base.map(n => ({ nombre: n, telefono: '' })); }
+  }
+  const operarias = cargarOperarias();
   const now = new Date();
   document.getElementById('operariasGrid').innerHTML = operarias.map(op => {
-    const color = OPERARIA_COLORS[op] || '#6b6860';
-    const jobsMes = jobs.filter(j => { const d = new Date(j.fecha+'T12:00:00'); return j.operaria===op && d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear(); });
-    const totalOp = pagosOperarias[op] || 0;
+    const nombre = op.nombre || op;
+    const tel = op.telefono || '';
+    const color = OPERARIA_COLORS[nombre] || '#6b6860';
+    const jobsMes = jobs.filter(j => { const d = new Date(j.fecha+'T12:00:00'); return j.operaria===nombre && d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear(); });
+    const totalOp = pagosOperarias[nombre] || 0;
+    const waLink = tel ? `https://wa.me/57${tel.replace(/\D/g,'').replace(/^57/,'')}` : '';
     return `<div class="operaria-card">
-      <div class="operaria-avatar" style="background:${color}">${op[0]}</div>
-      <div class="operaria-name">${op}</div>
+      <div class="operaria-avatar" style="background:${color}">${nombre[0]}</div>
+      <div class="operaria-name">${nombre}</div>
       <div class="operaria-jobs">${jobsMes.length} servicios este mes</div>
       <div class="operaria-pay">${formatCOP(totalOp)}</div>
       <div class="operaria-pay-label">Pago quincena</div>
-      <div style="margin-top:10px"><input class="pago-input" style="width:100%" placeholder="$ monto quincena" value="${totalOp||''}" onchange="updatePagoOperaria('${op}',this.value)"></div>
+      <div style="margin-top:10px">
+        <input class="pago-input" style="width:100%;margin-bottom:8px" placeholder="$ monto quincena" value="${totalOp||''}" onchange="updatePagoOperaria('${nombre}',this.value)">
+        <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+          <span style="font-size:11px;color:var(--text3);white-space:nowrap">📱 WhatsApp</span>
+          <input class="pago-input" style="flex:1;font-size:12px" placeholder="ej: 3001234567" value="${tel}" onchange="guardarTelOperaria('${nombre}',this.value)">
+          ${waLink ? `<a href="${waLink}" target="_blank" style="color:#25D366;font-size:20px;text-decoration:none;flex-shrink:0" title="Abrir WhatsApp">💬</a>` : ''}
+        </div>
+      </div>
     </div>`;
   }).join('');
-  const totalQuincena = operarias.reduce((s,op)=>s+(pagosOperarias[op]||0),0);
+  const totalQuincena = operarias.reduce((s,op)=>s+(pagosOperarias[op.nombre||op]||0),0);
   document.getElementById('pagosOperariasGrid').innerHTML = `
   <div class="pagos-card" style="grid-column:1/-1">
     <div class="pagos-card-title">Resumen quincena</div>
-    ${operarias.map(op=>`<div class="pago-row"><div class="pago-name"><div class="operaria-dot" style="background:${OPERARIA_COLORS[op]||'#6b6860'};width:8px;height:8px;border-radius:50%"></div>${op}</div><div class="pago-amount">${formatCOP(pagosOperarias[op]||0)}</div></div>`).join('')}
+    ${operarias.map(op=>{const n=op.nombre||op;return `<div class="pago-row"><div class="pago-name"><div class="operaria-dot" style="background:${OPERARIA_COLORS[n]||'#6b6860'};width:8px;height:8px;border-radius:50%"></div>${n}</div><div class="pago-amount">${formatCOP(pagosOperarias[n]||0)}</div></div>`;}).join('')}
     <div class="pago-total"><span>Total a pagar</span><span class="pago-total-val">${formatCOP(totalQuincena)}</span></div>
   </div>`;
 }
@@ -695,6 +716,18 @@ function closeJobModal() { document.getElementById('jobModal').classList.remove(
 function quickComplete(id) { const job = jobs.find(j=>j.id===id); if (job) { job.estado='completado'; saveData(); render(); } }
 function deleteJob(id) { if (!confirm('¿Eliminar este servicio?')) return; jobs=jobs.filter(j=>j.id!==id); saveData(); render(); }
 function togglePago(id,val) { const job = jobs.find(j=>j.id===id); if (job) { job.pagado=val==='pagado'; saveData(); renderStats(); } }
+function guardarTelOperaria(nombre, tel) {
+  try {
+    let saved = JSON.parse(localStorage.getItem('shl_operarias') || '[]');
+    if (!saved.length) saved = ['Angie','Marlin','Sofia','Juanita','Laura','Yurani','Wilfer'].map(n=>({nombre:n,telefono:''}));
+    const op = saved.find(o=>o.nombre===nombre);
+    if (op) op.telefono = tel.replace(/\D/g,'').replace(/^57/,'');
+    else saved.push({nombre, telefono: tel.replace(/\D/g,'').replace(/^57/,'')});
+    localStorage.setItem('shl_operarias', JSON.stringify(saved));
+  } catch(e) {}
+  renderOperarias();
+}
+
 function updatePagoOperaria(nombre,valor) { pagosOperarias[nombre]=parseCOP(valor); saveData(); renderOperarias(); }
 function calcularQuincena() { const operarias=['Angie','Marlin','Sofia','Juanita','Laura','Yurani','Wilfer']; const now=new Date(); const r=operarias.map(op=>{const n=jobs.filter(j=>{const d=new Date(j.fecha+'T12:00:00');return j.operaria===op&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()&&j.estado==='completado';});return `${op}: ${n.length} servicios`;}).join('\n'); alert(`📊 Servicios completados este mes:\n\n${r}`); }
 function changeWeek(delta) { weekOffset+=delta; renderAgenda(); }
@@ -702,28 +735,42 @@ function changeWeek(delta) { weekOffset+=delta; renderAgenda(); }
 function sendInstructions(id) {
   const job = jobs.find(j=>j.id===id);
   if (!job) return;
+
+  // Buscar info de la propiedad en PROPIEDADES_ACCESO
   const info = PROPIEDADES_ACCESO[job.propiedad];
+
+  // Construir el mensaje con datos del job + info de la propiedad si existe
   const direccion = info ? info.direccion : (job.direccion || job.propiedad || '—');
   const maps = info ? (info.maps || '—') : '—';
   const acceso = info ? info.acceso : (job.notas ? job.notas.replace(/Solicitud web[^·]*·?/,'').trim() : 'Coordinar con el cliente');
   const caja = info ? info.caja : '';
   const lavadora = info ? info.lavadora : false;
   const notas = info ? info.notas : '';
+
   let msg = '🧹 *INSTRUCCIONES DE LIMPIEZA — SuperHost Loft*\n\n';
-  msg += '📅 *Fecha:* '+fmtDate(job.fecha)+' '+(job.hora||'')+'\n';
-  if (job.operaria) msg += '👤 *Operaria:* '+job.operaria+'\n';
-  msg += '\n📍 *Dirección:*\n'+direccion+'\n';
-  if (maps !== '—') msg += '\n🗺️ *Maps:* '+maps+'\n';
-  msg += '\n🔑 *Acceso:*\n'+acceso+'\n';
-  if (caja) msg += '\n📦 *Código caja:* '+caja+'\n';
+  msg += `📅 *Fecha:* ${fmtDate(job.fecha)} ${job.hora||''}\n`;
+  if (job.operaria) msg += `👤 *Operaria:* ${job.operaria}\n`;
+  msg += `\n📍 *Dirección:*\n${direccion}\n`;
+  if (maps !== '—') msg += `\n🗺️ *Maps:* ${maps}\n`;
+  msg += `\n🔑 *Acceso:*\n${acceso}\n`;
+  if (caja) msg += `\n📦 *Código caja:* ${caja}\n`;
   if (lavadora) msg += '\n🧺 *Lavadora/Secadora disponible*\n';
-  if (job.tipoLimpieza && job.tipoLimpieza !== 'estandar') msg += '\n🧽 *Tipo:* '+job.tipoLimpieza+'\n';
-  if (notas) msg += '\n⚠️ *Notas:*\n'+notas+'\n';
+  if (job.tipoLimpieza && job.tipoLimpieza !== 'estandar') msg += `\n🧽 *Tipo:* ${job.tipoLimpieza}\n`;
+  if (notas) msg += `\n⚠️ *Notas:*\n${notas}\n`;
   msg += '\n✅ Avisar al finalizar. Gracias! 🏠';
-  const opInfo = (typeof operarias !== 'undefined') ? operarias.find(o=>o.nombre===job.operaria) : null;
-  const tel = opInfo ? opInfo.telefono : '';
-  const waNum = tel ? '57'+tel.toString().replace(/^57|\D/g,'') : '';
-  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
+
+  // Obtener teléfono desde localStorage (guardado en pestaña Equipo)
+  let waNum = '';
+  try {
+    const saved = JSON.parse(localStorage.getItem('shl_operarias') || '[]');
+    const opData = saved.find(o => o.nombre === job.operaria);
+    if (opData && opData.telefono) {
+      waNum = '57' + opData.telefono.replace(/\D/g,'').replace(/^57/,'');
+    }
+  } catch(e) {}
+
+  const url = 'https://wa.me/' + waNum + '?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
 }
 
 function enviarWhatsApp() {
