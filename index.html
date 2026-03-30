@@ -700,11 +700,30 @@ function calcularQuincena() { const operarias=['Angie','Marlin','Sofia','Juanita
 function changeWeek(delta) { weekOffset+=delta; renderAgenda(); }
 
 function sendInstructions(id) {
-  const job = jobs.find(j=>j.id===id); if (!job) return;
+  const job = jobs.find(j=>j.id===id);
+  if (!job) return;
   const info = PROPIEDADES_ACCESO[job.propiedad];
-  if (!info) { alert('No hay instrucciones para esta propiedad.'); return; }
-  const msg = `🧹 *INSTRUCCIONES DE LIMPIEZA — SuperHost Loft*\n\n📅 Fecha: ${fmtDate(job.fecha)} ${job.hora||''}\n👤 Operaria: ${job.operaria||'—'}\n\n📍 *Dirección:*\n${info.direccion}\n\n🗺️ *Maps:* ${info.maps||'—'}\n\n🔑 *Acceso:*\n${info.acceso}\n`+(info.caja?`\n📦 *Código caja:* ${info.caja}\n`:'')+(info.lavadora?'\n🧺 *Lavadora/Secadora disponible*\n':'')+(info.notas?`\n⚠️ *Notas:*\n${info.notas}\n`:'')+`\n✅ Avisar al finalizar. Gracias! 🏠`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+  const direccion = info ? info.direccion : (job.direccion || job.propiedad || '—');
+  const maps = info ? (info.maps || '—') : '—';
+  const acceso = info ? info.acceso : (job.notas ? job.notas.replace(/Solicitud web[^·]*·?/,'').trim() : 'Coordinar con el cliente');
+  const caja = info ? info.caja : '';
+  const lavadora = info ? info.lavadora : false;
+  const notas = info ? info.notas : '';
+  let msg = '🧹 *INSTRUCCIONES DE LIMPIEZA — SuperHost Loft*\n\n';
+  msg += '📅 *Fecha:* '+fmtDate(job.fecha)+' '+(job.hora||'')+'\n';
+  if (job.operaria) msg += '👤 *Operaria:* '+job.operaria+'\n';
+  msg += '\n📍 *Dirección:*\n'+direccion+'\n';
+  if (maps !== '—') msg += '\n🗺️ *Maps:* '+maps+'\n';
+  msg += '\n🔑 *Acceso:*\n'+acceso+'\n';
+  if (caja) msg += '\n📦 *Código caja:* '+caja+'\n';
+  if (lavadora) msg += '\n🧺 *Lavadora/Secadora disponible*\n';
+  if (job.tipoLimpieza && job.tipoLimpieza !== 'estandar') msg += '\n🧽 *Tipo:* '+job.tipoLimpieza+'\n';
+  if (notas) msg += '\n⚠️ *Notas:*\n'+notas+'\n';
+  msg += '\n✅ Avisar al finalizar. Gracias! 🏠';
+  const opInfo = (typeof operarias !== 'undefined') ? operarias.find(o=>o.nombre===job.operaria) : null;
+  const tel = opInfo ? opInfo.telefono : '';
+  const waNum = tel ? '57'+tel.toString().replace(/^57|\D/g,'') : '';
+  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
 }
 
 function enviarWhatsApp() {
