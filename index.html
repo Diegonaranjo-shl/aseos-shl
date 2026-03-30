@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aseos SHL · SuperHost Loft</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0f0c;
+  --surface: #161714;
+  --surface2: #1e1f1b;
+  --surface3: #262721;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --lime: #c8f050;
+  --lime-dim: rgba(200,240,80,0.12);
+  --lime-border: rgba(200,240,80,0.25);
+  --teal: #3ecfbf;
+  --teal-dim: rgba(62,207,191,0.1);
+  --coral: #f06a50;
+  --coral-dim: rgba(240,106,80,0.1);
+  --amber: #f5b731;
+  --amber-dim: rgba(245,183,49,0.1);
+  --green: #52c97a;
+  --green-dim: rgba(82,201,122,0.1);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.1);
+  --text: #f0ede4;
+  --text2: #9a978e;
+  --text3: #4a4840;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+}
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--lime); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.brand-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--lime); }
+.brand-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.date-badge { background: var(--surface2); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; font-size: 12px; color: var(--text2); }
+.btn { padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; border: none; transition: all 0.15s; }
+.btn-lime { background: var(--lime); color: #0e0f0c; }
+.btn-lime:hover { background: #d4f56a; }
+.btn-outline { background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); }
+.btn-outline:hover { border-color: var(--lime); color: var(--lime); }
+.tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; gap: 4px; }
+.tab { padding: 13px 18px; font-size: 13px; font-weight: 500; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+.tab:hover { color: var(--text2); }
+.tab.active { color: var(--lime); border-bottom-color: var(--lime); }
+.content { padding: 20px 24px 40px; }
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+.stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); margin-bottom: 8px; }
+.stat-value { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; color: var(--lime); line-height: 1; }
+.stat-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+.agenda-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.section-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 600; color: var(--text); }
+.week-nav { display: flex; align-items: center; gap: 8px; }
+.week-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text2); width: 30px; height: 30px; border-radius: 6px; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.week-btn:hover { border-color: var(--lime); color: var(--lime); }
+.week-label { font-size: 13px; color: var(--text2); min-width: 140px; text-align: center; }
+.jobs-list { display: flex; flex-direction: column; gap: 10px; }
+.job-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; display: grid; grid-template-columns: 80px 1fr 160px 140px 120px 100px; align-items: center; gap: 12px; transition: border-color 0.15s; }
+.job-card:hover { border-color: var(--border2); }
+.job-card.airbnb { border-left: 3px solid var(--lime); }
+.job-card.client { border-left: 3px solid var(--teal); }
+.job-date-day { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--text); line-height: 1; }
+.job-address { font-size: 13px; font-weight: 500; color: var(--text); }
+.job-client { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.type-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.type-standard { background: var(--lime-dim); color: var(--lime); border: 1px solid var(--lime-border); }
+.type-deep { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(62,207,191,0.25); }
+.type-post { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(167,139,250,0.25); }
+.job-operaria { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+.operaria-dot { width: 8px; height: 8px; border-radius: 50%; }
+.job-status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.status-pendiente { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,183,49,0.25); }
+.status-confirmado { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(62,207,191,0.25); }
+.status-completado { background: var(--green-dim); color: var(--green); border: 1px solid rgba(82,201,122,0.25); }
+.status-cancelado { background: var(--coral-dim); color: var(--coral); border: 1px solid rgba(240,106,80,0.25); }
+.job-actions { display: flex; gap: 6px; justify-content: flex-end; }
+.btn-action-sm { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.btn-action-sm:hover { border-color: var(--lime); color: var(--lime); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 28px; width: 520px; max-width: 95vw; transform: translateY(8px); transition: transform 0.2s; max-height: 90vh; overflow-y: auto; }
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--lime); }
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.modal-field { margin-bottom: 14px; }
+.modal-field.full { grid-column: 1/-1; }
+.modal-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); margin-bottom: 6px; font-weight: 500; }
+.modal-input { width: 100%; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm); font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; transition: border-color 0.15s; }
+.modal-input:focus { border-color: var(--lime); }
+.modal-input option { background: var(--surface2); }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+.instrucciones-box { background: var(--surface2); border: 1px solid var(--lime-border); border-radius: var(--radius); padding: 16px; margin-top: 14px; font-size: 12px; line-height: 1.7; color: var(--text2); }
+.instrucciones-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--lime); margin-bottom: 8px; font-weight: 600; }
+.instrucciones-item { margin-bottom: 4px; }
+.instrucciones-item strong { color: var(--text); }
+.btn-whatsapp { display: inline-flex; align-items: center; gap: 8px; background: #25d366; color: white; border: none; padding: 10px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 12px; transition: opacity 0.15s; }
+.btn-whatsapp:hover { opacity: 0.9; }
+.pagos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.pagos-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+.pagos-card-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 14px; color: var(--text); }
+.pago-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.pago-row:last-of-type { border-bottom: none; }
+.pago-name { color: var(--text2); display: flex; align-items: center; gap: 8px; }
+.pago-amount { font-weight: 600; color: var(--text); }
+.pago-total { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border2); display: flex; justify-content: space-between; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
+.pago-total-val { color: var(--lime); }
+.pago-input { width: 90px; padding: 4px 8px; background: var(--surface3); border: 1px solid var(--border); border-radius: 6px; font-size: 11px; color: var(--text); font-family: 'DM Sans', sans-serif; text-align: right; outline: none; }
+.pago-input:focus { border-color: var(--lime); }
+.operarias-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; margin-bottom: 20px; }
+.operaria-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
+.operaria-avatar { width: 48px; height: 48px; border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-family: 'Syne', sans-serif; font-weight: 700; color: #0e0f0c; }
+.operaria-name { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+.operaria-jobs { font-size: 11px; color: var(--text3); margin-bottom: 10px; }
+.operaria-pay { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--lime); }
+.operaria-pay-label { font-size: 10px; color: var(--text3); margin-top: 2px; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+.fade-in { animation: fadeIn 0.25s ease; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-icon">🧹</div>
+    <div>
+      <div class="brand-name">Aseos SHL</div>
+      <div class="brand-sub">Coordinación de limpieza · SuperHost Loft</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="date-badge" id="todayBadge"></div>
+    <button class="btn btn-outline" onclick="showTab('operarias')">👥 Equipo</button>
+    <div id="syncStatus" style="display:flex;align-items:center;padding:0 12px;font-size:11px;color:var(--text3)">⏳ Cargando...</div>
+    <button class="btn btn-outline" onclick="importarDesdeGmail()">📧 Importar Gmail</button>
+    <button class="btn btn-outline" onclick="importarRentasDirectas()">🏠 Rentas directas</button>
+    <button class="btn btn-outline" onclick="window.open('https://solicitud-limpieza.netlify.app','_blank')">🌐 Formulario clientes</button>
+    <button class="btn btn-lime" onclick="openNewJob()">+ Nueva solicitud</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" id="tab-agenda" onclick="showTab('agenda')">📅 Agenda</div>
+  <div class="tab" id="tab-hoy" onclick="showTab('hoy')">🔥 Hoy</div>
+  <div class="tab" id="tab-pagos-clientes" onclick="showTab('pagos-clientes')">💰 Pagos clientes</div>
+  <div class="tab" id="tab-operarias" onclick="showTab('operarias')">👥 Operarias</div>
+  <div class="tab" id="tab-recordatorios" onclick="showTab('recordatorios')">🔔 Recordatorios</div>
+  <div class="tab" id="tab-solicitudes" onclick="showTab('solicitudes')">📋 Solicitudes</div>
+</div>
+
+<div class="content">
+  <div class="stats-row" id="statsRow"></div>
+
+  <div id="view-agenda">
+    <div class="agenda-header">
+      <div class="section-title">Agenda de la semana</div>
+      <div class="week-nav">
+        <button class="week-btn" onclick="changeWeek(-1)">‹</button>
+        <span class="week-label" id="weekLabel">—</span>
+        <button class="week-btn" onclick="changeWeek(1)">›</button>
+      </div>
+    </div>
+    <div class="jobs-list" id="agendaList"></div>
+  </div>
+
+  <div id="view-hoy" style="display:none">
+    <div class="agenda-header">
+      <div class="section-title">Trabajos de hoy</div>
+      <button class="btn btn-lime" onclick="openNewJob()">+ Agregar</button>
+    </div>
+    <div class="jobs-list" id="hoyList"></div>
+  </div>
+
+  <div id="view-pagos-clientes" style="display:none">
+    <div class="agenda-header">
+      <div class="section-title">Pagos de clientes</div>
+      <button class="btn btn-outline" onclick="exportPagos()">↓ Exportar</button>
+    </div>
+    <div id="pagosClientesList"></div>
+  </div>
+
+  <div id="view-operarias" style="display:none">
+    <div class="agenda-header">
+      <div class="section-title">Equipo de limpieza</div>
+      <button class="btn btn-lime" onclick="calcularQuincena()">💰 Calcular quincena</button>
+    </div>
+    <div class="operarias-grid" id="operariasGrid"></div>
+    <div class="pagos-grid" id="pagosOperariasGrid"></div>
+  </div>
+
+  <div id="view-solicitudes" style="display:none">
+    <div class="agenda-header">
+      <div class="section-title">📋 Solicitudes de clientes externos</div>
+      <button class="btn btn-lime" onclick="cargarSolicitudes()">🔄 Actualizar</button>
+    </div>
+    <div id="solicitudesList"><div style="text-align:center;padding:40px;color:var(--text3)">Cargando solicitudes...</div></div>
+  </div>
+
+  <div id="view-recordatorios" style="display:none">
+    <div class="agenda-header">
+      <div class="section-title">🔔 Recordatorios de pago · Rentas directas</div>
+      <button class="btn btn-lime" onclick="generarRecordatoriosWhatsApp()">📱 Enviar todos</button>
+    </div>
+    <div id="recordatoriosList"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="jobModal">
+  <div class="modal">
+    <div class="modal-title" id="jobModalTitle">Nueva solicitud de limpieza</div>
+    <div class="modal-grid">
+      <div class="modal-field">
+        <div class="modal-label">Tipo de cliente</div>
+        <select class="modal-input" id="jTipoCliente" onchange="onTipoClienteChange()">
+          <option value="airbnb">🏠 Propiedad Airbnb</option>
+          <option value="externo">👤 Cliente externo</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Tipo de limpieza</div>
+        <select class="modal-input" id="jTipoLimpieza">
+          <option value="estandar">Limpieza estándar</option>
+          <option value="profunda">Limpieza profunda</option>
+          <option value="postobra">Post obra/mudanza</option>
+        </select>
+      </div>
+      <div class="modal-field full" id="jPropiedadField">
+        <div class="modal-label">Propiedad</div>
+        <select class="modal-input" id="jPropiedad" onchange="onPropiedadChange()">
+          <option value="">— Selecciona propiedad —</option>
+        </select>
+      </div>
+      <div class="modal-field full" id="jDireccionField" style="display:none">
+        <div class="modal-label">Dirección del apartamento</div>
+        <input class="modal-input" id="jDireccion" placeholder="Calle 98 # 13-41 Apt 5">
+      </div>
+      <div class="modal-field" id="jClienteField" style="display:none">
+        <div class="modal-label">Nombre del cliente</div>
+        <input class="modal-input" id="jCliente" placeholder="Nombre completo">
+      </div>
+      <div class="modal-field" id="jTelefonoField" style="display:none">
+        <div class="modal-label">Teléfono / WhatsApp</div>
+        <input class="modal-input" id="jTelefono" placeholder="+57 300 000 0000">
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Fecha</div>
+        <input class="modal-input" id="jFecha" type="date">
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Hora inicio</div>
+        <input class="modal-input" id="jHora" type="time">
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Operaria asignada</div>
+        <select class="modal-input" id="jOperaria">
+          <option value="">Sin asignar</option>
+          <option value="Angie">Angie</option>
+          <option value="Marlin">Marlin</option>
+          <option value="Sofia">Sofía</option>
+          <option value="Juanita">Juanita</option>
+          <option value="Laura">Laura</option>
+          <option value="Yurani">Yurani</option>
+          <option value="Wilfer">Wilfer</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Valor cobrado (COP)</div>
+        <input class="modal-input" id="jValor" type="text" placeholder="$ 0">
+      </div>
+      <div class="modal-field full">
+        <div class="modal-label">Estado</div>
+        <select class="modal-input" id="jEstado">
+          <option value="pendiente">Pendiente</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="completado">Completado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+      <div class="modal-field full">
+        <div class="modal-label">Notas adicionales</div>
+        <input class="modal-input" id="jNotas" placeholder="Instrucciones especiales...">
+      </div>
+    </div>
+    <div class="instrucciones-box" id="instruccionesBox" style="display:none">
+      <div class="instrucciones-title">📋 Instrucciones para la operaria</div>
+      <div id="instruccionesContent"></div>
+      <button class="btn-whatsapp" onclick="enviarWhatsApp()">📱 Enviar instrucciones por WhatsApp</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeJobModal()">Cancelar</button>
+      <button class="btn btn-lime" onclick="saveJob()">✓ Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PROPIEDADES_ACCESO = {
+  'BlackLiving ZC': { direccion: 'Cra 73 Bis #64A-67, Zonas comunes · Ed. BlackLiving, Engativá', maps: 'https://g.co/kgs/e2irUV', acceso: 'Portería da acceso. Llave maestra en administración.', caja: '', lavadora: false, notas: 'Incluye: lobby, escaleras, pasillos, zonas húmedas y parqueadero.' },
+  'BlackLiving 301': { direccion: 'Cra 73 Bis #64A-67, Apto 301, Ed. BlackLiving, Engativá', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock en portón. Frotar mano en la parte superior para activar teclado.', caja: '3676', lavadora: true, notas: 'Dejar llave de emergencia en la cajita. Portería 24/7.' },
+  'BlackLiving 302': { direccion: 'Cra 73 Bis #64A-67, Apto 302', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '9244', lavadora: true, notas: '' },
+  'BlackLiving 303': { direccion: 'Cra 73 Bis #64A-67, Apto 303', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '2713', lavadora: true, notas: '' },
+  'BlackLiving 304': { direccion: 'Cra 73 Bis #64A-67, Apto 304', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '9094', lavadora: true, notas: '' },
+  'BlackLiving 305': { direccion: 'Cra 73 Bis #64A-67, Apto 305', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '5961', lavadora: true, notas: '' },
+  'BlackLiving 306': { direccion: 'Cra 73 Bis #64A-67, Apto 306', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '6457', lavadora: true, notas: '' },
+  'BlackLiving 401': { direccion: 'Cra 73 Bis #64A-67, Apto 401', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '8219', lavadora: true, notas: '' },
+  'BlackLiving 402': { direccion: 'Cra 73 Bis #64A-67, Apto 402', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '3253', lavadora: true, notas: '' },
+  'BlackLiving 403': { direccion: 'Cra 73 Bis #64A-67, Apto 403', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '9733', lavadora: true, notas: '' },
+  'BlackLiving 404': { direccion: 'Cra 73 Bis #64A-67, Apto 404', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '9034', lavadora: true, notas: '' },
+  'BlackLiving 405': { direccion: 'Cra 73 Bis #64A-67, Apto 405', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '1357', lavadora: true, notas: '' },
+  'BlackLiving 406': { direccion: 'Cra 73 Bis #64A-67, Apto 406', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '1486', lavadora: true, notas: '' },
+  'BlackLiving 101': { direccion: 'Cra 73 Bis #64A-67, Apto 101', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '2850', lavadora: true, notas: 'Apto familiar 2 habitaciones.' },
+  'BlackLiving 201': { direccion: 'Cra 73 Bis #64A-67, Apto 201', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '1607', lavadora: true, notas: '' },
+  'BlackLiving 202': { direccion: 'Cra 73 Bis #64A-67, Apto 202', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '0190', lavadora: true, notas: '' },
+  'Penthouse 501': { direccion: 'Cra 73 Bis #64A-67, Apto 501 PH', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock.', caja: '2080', lavadora: true, notas: 'Penthouse con jacuzzi. Revisar limpieza del jacuzzi.' },
+  'La 33-805': { direccion: 'Cra 7 #33-91, Ed. Teleskop, Apto 805', maps: 'https://maps.app.goo.gl/SoL7i1pn4dbbZZh39', acceso: 'Llave física. Portería entrega llave.', caja: '', lavadora: false, notas: 'Dejar llaves en portería al salir.' },
+  'Museo 1309': { direccion: 'Cra 13a #28-21, Ed. Museo Parque Central, Torre A, Apto 1309', maps: '', acceso: 'Llave física. Vigilante entrega llave en sobre.', caja: '', lavadora: true, notas: 'Regar plantas una vez a la semana.' },
+  'Candelaria 1210': { direccion: 'Calle 18 #3-18, Ed. Ventto, Apto 1210', maps: '', acceso: 'Caja de llaves código: 9539. Ascensor pisos pares al piso 12.', caja: '9539', lavadora: false, notas: '' },
+  'Country 310': { direccion: 'Calle 134C #12B-91, Ed. Lecco, Apto 310, Piso 3', maps: '', acceso: 'Llave física. Vigilante entrega llaves.', caja: '', lavadora: false, notas: 'Al lado del ascensor.' },
+  'Santa Bárbara 205': { direccion: 'Calle 124 #21-10, Apto 205', maps: '', acceso: 'Cerradura electrónica código 3971.', caja: '3971', lavadora: false, notas: 'Cuidado con sofá y sillas de cuero — no productos abrasivos.' },
+  'Rodadero 401': { direccion: 'Calle 17 #2-63, Ed. Manzanares, Apto 401, El Rodadero, Santa Marta', maps: 'https://maps.app.goo.gl/BEoQs7cRnZt1QQob7', acceso: 'Cerradura electrónica código 123456#.', caja: '', lavadora: true, notas: 'Coordinar con Yurani.' },
+  'Santa Marina 1410': { direccion: 'Cj. Santa Marina, Torre 2, Apto 1410, Don Jaca, Santa Marta', maps: '', acceso: 'Caja de llaves código 1621 → tarjeta blanca. Tarjeta activa electricidad.', caja: '1621', lavadora: true, notas: 'No sacar tarjeta de la torre.' },
+};
+
+const OPERARIA_COLORS = {
+  'Angie': '#c8f050', 'Marlin': '#3ecfbf', 'Sofia': '#a78bfa',
+  'Juanita': '#f5b731', 'Laura': '#f06a50', 'Yurani': '#52c97a', 'Wilfer': '#60a5fa'
+};
+
+let jobs = [];
+let pagosOperarias = { 'Angie':0,'Marlin':0,'Sofia':0,'Juanita':0,'Laura':0,'Yurani':0,'Wilfer':0 };
+let weekOffset = 0;
+let editingJobId = null;
+
+// ═══════════════════════════════════════
+// ✅ URL ACTUALIZADA — Apps Script definitivo
+// ═══════════════════════════════════════
+const GAS_URL = '/.netlify/functions/sheets'; // Proxy local — sin CORS
+
+let syncTimer = null;
+
+async function saveData() {
+  try { localStorage.setItem('shl_aseos', JSON.stringify(jobs)); } catch(e) {}
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(async () => {
+    try {
+      showSyncStatus('syncing');
+      const res = await fetch(GAS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ action: 'save', jobs, pagos: pagosOperarias })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.ok) showSyncStatus('ok');
+        else showSyncStatus('error');
+      } else {
+        showSyncStatus('error');
+      }
+    } catch(e) {
+      // Si falla CORS en POST, al menos los datos están en localStorage
+      showSyncStatus('offline');
+    }
+  }, 2000);
+}
+
+async function loadData() {
+  showSyncStatus('loading');
+
+  // ── 1. Mostrar datos precargados INMEDIATAMENTE (sin red) ──────────────
+  const DATOS_PRECARGADOS = window._DATOS_SHEET_ || { jobs: [], pagos: {} };
+
+  function limpiarJobs(arr) {
+    const seen = new Set();
+    return arr
+      .map(j => ({
+        ...j,
+        fecha: (j.fecha || '').split('T')[0],
+        hora:  (j.hora  || '').includes('1899') ? '11:00'
+               : (j.hora || '').includes('T')   ? j.hora.split('T')[1].substring(0,5)
+               : (j.hora || '11:00')
+      }))
+      .filter(j => { if (seen.has(j.id)) return false; seen.add(j.id); return true; });
+  }
+
+  // Cargar precargados + localStorage (para cambios locales nuevos)
+  jobs = limpiarJobs(DATOS_PRECARGADOS.jobs);
+  try {
+    const localRaw = localStorage.getItem('shl_aseos');
+    if (localRaw) {
+      const localJobs = JSON.parse(localRaw);
+      const idsSheet = new Set(jobs.map(j => j.id));
+      jobs = jobs.concat(localJobs.filter(j => !idsSheet.has(j.id)));
+    }
+  } catch(e) {}
+  try { localStorage.setItem('shl_aseos', JSON.stringify(jobs)); } catch(e) {}
+  showSyncStatus('ok');
+  render();
+
+  // ── 2. Actualizar desde Google Sheets CSV (sin CORS) ─────────────────
+  // URL CSV pública — sin restricciones CORS, funciona en cualquier dispositivo
+  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYZsChuajH7jRlrBWvh-lrFqkC8gGM3zx0ZQZLoIHSUEhMoH8OtvgbyG6k9wkF4HzR_Y875irF7lJF/pub?output=csv&gid=0&t=' + Date.now();
+
+  try {
+    const res = await fetch(CSV_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const csv = await res.text();
+    const lines = csv.trim().split('\n');
+    if (lines.length < 2) throw new Error('Sin datos');
+
+    const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g,'').trim());
+    const jobsCSV = lines.slice(1).map(line => {
+      // Parsear CSV respetando comillas
+      const vals = []; let cur = ''; let inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        if (line[i] === '"') { inQ = !inQ; continue; }
+        if (line[i] === ',' && !inQ) { vals.push(cur); cur = ''; continue; }
+        cur += line[i];
+      }
+      vals.push(cur);
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = vals[i] || ''; });
+      return obj;
+    }).filter(j => j.id);
+
+    if (jobsCSV.length > 0) {
+      jobs = limpiarJobs(jobsCSV);
+      try { localStorage.setItem('shl_aseos', JSON.stringify(jobs)); } catch(e) {}
+      showSyncStatus('ok');
+      render();
+    }
+  } catch(e) {
+    console.log('CSV load:', e.message, '— usando datos precargados');
+    // Ya tenemos datos precargados, no hay problema
+  }
+}
+
+function showSyncStatus(state) {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  const icons = { loading:'⏳', syncing:'🔄', ok:'☁️', error:'⚠️', offline:'💾' };
+  const labels = { loading:'Cargando...', syncing:'Guardando...', ok:'Sincronizado', error:'Sin conexión', offline:'Local' };
+  const colors = { loading:'var(--text3)', syncing:'var(--amber)', ok:'var(--lime)', error:'var(--coral)', offline:'var(--text3)' };
+  el.innerHTML = `<span style="color:${colors[state]};font-size:11px">${icons[state]} ${labels[state]}</span>`;
+}
+
+function formatCOP(n) { if (!n) return '$0'; return '$' + Math.round(n).toLocaleString('es-CO'); }
+function parseCOP(s) { return parseInt((s||'').replace(/[^0-9]/g,'')) || 0; }
+function fmtDate(d) { const date = new Date(d + 'T12:00:00'); return date.toLocaleDateString('es-CO', { weekday:'short', day:'numeric', month:'short' }); }
+function isToday(d) { return d === new Date().toISOString().split('T')[0]; }
+function getWeekDates(offset=0) {
+  const now = new Date(); const day = now.getDay();
+  const monday = new Date(now); monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
+  const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+  return { start: monday, end: sunday };
+}
+function inWeek(dateStr, offset=0) {
+  const { start, end } = getWeekDates(offset);
+  const d = new Date(dateStr + 'T12:00:00');
+  return d >= start && d <= end;
+}
+function getStatusClass(s) { return { pendiente:'status-pendiente', confirmado:'status-confirmado', completado:'status-completado', cancelado:'status-cancelado' }[s] || 'status-pendiente'; }
+function getStatusLabel(s) { return { pendiente:'Pendiente', confirmado:'Confirmado', completado:'Completado', cancelado:'Cancelado' }[s] || s; }
+function getTipoClass(t) { return { estandar:'type-standard', profunda:'type-deep', postobra:'type-post' }[t] || 'type-standard'; }
+function getTipoLabel(t) { return { estandar:'Limpieza estándar', profunda:'Limpieza profunda', postobra:'Post obra' }[t] || t; }
+
+function render() { renderStats(); renderAgenda(); renderHoy(); renderPagosClientes(); renderOperarias(); }
+
+function renderStats() {
+  const today = new Date().toISOString().split('T')[0];
+  const hoy = jobs.filter(j => j.fecha === today);
+  const semana = jobs.filter(j => inWeek(j.fecha, weekOffset));
+  const pendPago = jobs.filter(j => j.estado === 'completado' && !j.pagado);
+  const totalMes = jobs.filter(j => { const d = new Date(j.fecha+'T12:00:00'); const now = new Date(); return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear(); }).reduce((s,j)=>s+(j.valor||0),0);
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Hoy</div><div class="stat-value">${hoy.length}</div><div class="stat-sub">servicios programados</div></div>
+    <div class="stat-card"><div class="stat-label">Esta semana</div><div class="stat-value">${semana.length}</div><div class="stat-sub">servicios en agenda</div></div>
+    <div class="stat-card"><div class="stat-label">Por cobrar</div><div class="stat-value" style="color:var(--amber)">${pendPago.length}</div><div class="stat-sub">completados sin pago</div></div>
+    <div class="stat-card"><div class="stat-label">Facturado mes</div><div class="stat-value">${formatCOP(totalMes)}</div><div class="stat-sub">total cobrado</div></div>`;
+}
+
+function renderJobCard(job) {
+  const color = OPERARIA_COLORS[job.operaria] || '#6b6860';
+  const dateObj = new Date(job.fecha + 'T12:00:00');
+  const tipo = job.tipoCliente === 'airbnb' ? 'airbnb' : 'client';
+  return `
+  <div class="job-card ${tipo} fade-in" data-id="${job.id}">
+    <div>
+      <div style="font-size:10px;color:var(--text3);text-transform:uppercase">${dateObj.toLocaleDateString('es-CO',{weekday:'short'})}</div>
+      <div class="job-date-day">${dateObj.getDate()}</div>
+      <div style="font-size:10px;color:var(--text3)">${job.hora || '—'}</div>
+    </div>
+    <div>
+      <div class="job-address">${job.propiedad || job.direccion || '—'}</div>
+      <div class="job-client">${job.tipoCliente === 'airbnb' ? '🏠 Airbnb' : `👤 ${job.cliente || 'Cliente externo'}`}${job.notas ? ' · '+job.notas : ''}</div>
+    </div>
+    <div><span class="type-badge ${getTipoClass(job.tipoLimpieza)}">${getTipoLabel(job.tipoLimpieza)}</span></div>
+    <div class="job-operaria">
+      <div class="operaria-dot" style="background:${color}"></div>
+      ${job.operaria || '<span style="color:var(--text3)">Sin asignar</span>'}
+    </div>
+    <div><span class="job-status-badge ${getStatusClass(job.estado)}">${getStatusLabel(job.estado)}</span></div>
+    <div class="job-actions">
+      <button class="btn-action-sm" onclick="editJob('${job.id}')" title="Editar">✏️</button>
+      <button class="btn-action-sm" onclick="quickComplete('${job.id}')" title="Completar">✓</button>
+      <button class="btn-action-sm" onclick="sendInstructions('${job.id}')" title="Enviar instrucciones">📱</button>
+      <button class="btn-action-sm" onclick="deleteJob('${job.id}')" title="Eliminar" style="color:var(--coral)">✕</button>
+    </div>
+  </div>`;
+}
+
+function renderAgenda() {
+  const { start, end } = getWeekDates(weekOffset);
+  document.getElementById('weekLabel').textContent = `${start.toLocaleDateString('es-CO',{day:'numeric',month:'short'})} – ${end.toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'})}`;
+  const weekJobs = jobs.filter(j => inWeek(j.fecha, weekOffset)).sort((a,b) => a.fecha.localeCompare(b.fecha) || (a.hora||'').localeCompare(b.hora||''));
+  const list = document.getElementById('agendaList');
+  if (!weekJobs.length) { list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px">No hay servicios esta semana.<br>Usa "+ Nueva solicitud" para agregar uno.</div>`; return; }
+  list.innerHTML = weekJobs.map(renderJobCard).join('');
+}
+
+function renderHoy() {
+  const today = new Date().toISOString().split('T')[0];
+  const hoyJobs = jobs.filter(j => j.fecha === today).sort((a,b) => (a.hora||'').localeCompare(b.hora||''));
+  const list = document.getElementById('hoyList');
+  if (!hoyJobs.length) { list.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px">No hay servicios para hoy.</div>`; return; }
+  list.innerHTML = hoyJobs.map(renderJobCard).join('');
+}
+
+function renderPagosClientes() {
+  const completados = jobs.filter(j => j.valor > 0).sort((a,b) => b.fecha.localeCompare(a.fecha));
+  const totalCobrado = completados.reduce((s,j) => s+(j.pagado?j.valor:0), 0);
+  const totalPendiente = completados.filter(j=>!j.pagado).reduce((s,j)=>s+j.valor,0);
+  document.getElementById('pagosClientesList').innerHTML = `
+  <div class="stats-row" style="margin-bottom:16px">
+    <div class="stat-card"><div class="stat-label">Total cobrado</div><div class="stat-value">${formatCOP(totalCobrado)}</div></div>
+    <div class="stat-card"><div class="stat-label">Por cobrar</div><div class="stat-value" style="color:var(--amber)">${formatCOP(totalPendiente)}</div></div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 120px 100px 80px;padding:10px 16px;background:var(--surface2);font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text3)">
+      <div>Cliente / Propiedad</div><div>Fecha</div><div>Tipo</div><div>Operaria</div><div>Valor</div><div>Estado</div>
+    </div>
+    ${completados.map(j => `
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 120px 100px 80px;padding:12px 16px;border-top:1px solid var(--border);font-size:12px;align-items:center">
+      <div><strong style="color:var(--text)">${j.propiedad||j.cliente||'—'}</strong></div>
+      <div style="color:var(--text2)">${fmtDate(j.fecha)}</div>
+      <div><span class="type-badge ${getTipoClass(j.tipoLimpieza)}">${getTipoLabel(j.tipoLimpieza)}</span></div>
+      <div style="color:var(--text2)">${j.operaria||'—'}</div>
+      <div style="font-weight:600;color:var(--text)">${formatCOP(j.valor)}</div>
+      <div>
+        <select style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text2);font-size:11px;padding:3px 6px;cursor:pointer" onchange="togglePago('${j.id}',this.value)">
+          <option value="pendiente" ${!j.pagado?'selected':''}>Pendiente</option>
+          <option value="pagado" ${j.pagado?'selected':''}>Pagado</option>
+        </select>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderOperarias() {
+  const operarias = ['Angie','Marlin','Sofia','Juanita','Laura','Yurani','Wilfer'];
+  const now = new Date();
+  document.getElementById('operariasGrid').innerHTML = operarias.map(op => {
+    const color = OPERARIA_COLORS[op] || '#6b6860';
+    const jobsMes = jobs.filter(j => { const d = new Date(j.fecha+'T12:00:00'); return j.operaria===op && d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear(); });
+    const totalOp = pagosOperarias[op] || 0;
+    return `<div class="operaria-card">
+      <div class="operaria-avatar" style="background:${color}">${op[0]}</div>
+      <div class="operaria-name">${op}</div>
+      <div class="operaria-jobs">${jobsMes.length} servicios este mes</div>
+      <div class="operaria-pay">${formatCOP(totalOp)}</div>
+      <div class="operaria-pay-label">Pago quincena</div>
+      <div style="margin-top:10px"><input class="pago-input" style="width:100%" placeholder="$ monto quincena" value="${totalOp||''}" onchange="updatePagoOperaria('${op}',this.value)"></div>
+    </div>`;
+  }).join('');
+  const totalQuincena = operarias.reduce((s,op)=>s+(pagosOperarias[op]||0),0);
+  document.getElementById('pagosOperariasGrid').innerHTML = `
+  <div class="pagos-card" style="grid-column:1/-1">
+    <div class="pagos-card-title">Resumen quincena</div>
+    ${operarias.map(op=>`<div class="pago-row"><div class="pago-name"><div class="operaria-dot" style="background:${OPERARIA_COLORS[op]||'#6b6860'};width:8px;height:8px;border-radius:50%"></div>${op}</div><div class="pago-amount">${formatCOP(pagosOperarias[op]||0)}</div></div>`).join('')}
+    <div class="pago-total"><span>Total a pagar</span><span class="pago-total-val">${formatCOP(totalQuincena)}</span></div>
+  </div>`;
+}
+
+function populatePropiedades() {
+  const sel = document.getElementById('jPropiedad');
+  sel.innerHTML = '<option value="">— Selecciona propiedad —</option>';
+  Object.keys(PROPIEDADES_ACCESO).forEach(p => { const opt = document.createElement('option'); opt.value = p; opt.textContent = p; sel.appendChild(opt); });
+}
+
+function onTipoClienteChange() {
+  const tipo = document.getElementById('jTipoCliente').value;
+  document.getElementById('jPropiedadField').style.display = tipo==='airbnb'?'block':'none';
+  document.getElementById('jDireccionField').style.display = tipo==='externo'?'block':'none';
+  document.getElementById('jClienteField').style.display = tipo==='externo'?'block':'none';
+  document.getElementById('jTelefonoField').style.display = tipo==='externo'?'block':'none';
+  document.getElementById('instruccionesBox').style.display = 'none';
+}
+
+function onPropiedadChange() {
+  const prop = document.getElementById('jPropiedad').value;
+  if (!prop) { document.getElementById('instruccionesBox').style.display='none'; return; }
+  const info = PROPIEDADES_ACCESO[prop]; if (!info) return;
+  showInstrucciones(info, prop);
+}
+
+function showInstrucciones(info, propName) {
+  const box = document.getElementById('instruccionesBox');
+  const content = document.getElementById('instruccionesContent');
+  box.style.display = 'block';
+  let html = `<div class="instrucciones-item">📍 <strong>Dirección:</strong> ${info.direccion}</div>
+    <div class="instrucciones-item">🗺️ <strong>Google Maps:</strong> <a href="${info.maps}" target="_blank" style="color:var(--lime)">${info.maps||'Ver en Maps'}</a></div>
+    <div class="instrucciones-item">🔑 <strong>Acceso:</strong> ${info.acceso}</div>`;
+  if (info.caja) html += `<div class="instrucciones-item">📦 <strong>Código caja de llaves:</strong> ${info.caja}</div>`;
+  if (info.lavadora) html += `<div class="instrucciones-item" style="margin-top:8px;color:var(--lime)">🧺 <strong>Lavadora/Secadora disponible</strong></div>`;
+  if (info.notas) html += `<div class="instrucciones-item" style="margin-top:6px">⚠️ <strong>Notas importantes:</strong> ${info.notas}</div>`;
+  content.innerHTML = html;
+}
+
+function openNewJob() {
+  editingJobId = null;
+  document.getElementById('jobModalTitle').textContent = 'Nueva solicitud de limpieza';
+  ['jTipoCliente','jTipoLimpieza','jPropiedad','jDireccion','jCliente','jTelefono','jOperaria','jValor','jNotas'].forEach(id => { try { document.getElementById(id).value = ''; } catch(e){} });
+  document.getElementById('jTipoCliente').value = 'airbnb';
+  document.getElementById('jTipoLimpieza').value = 'estandar';
+  document.getElementById('jFecha').value = new Date().toISOString().split('T')[0];
+  document.getElementById('jHora').value = '08:00';
+  document.getElementById('jEstado').value = 'pendiente';
+  document.getElementById('instruccionesBox').style.display = 'none';
+  onTipoClienteChange(); populatePropiedades();
+  document.getElementById('jobModal').classList.add('open');
+}
+
+function editJob(id) {
+  const job = jobs.find(j=>j.id===id); if (!job) return;
+  editingJobId = id;
+  document.getElementById('jobModalTitle').textContent = 'Editar servicio';
+  populatePropiedades();
+  document.getElementById('jTipoCliente').value = job.tipoCliente||'airbnb';
+  document.getElementById('jTipoLimpieza').value = job.tipoLimpieza||'estandar';
+  document.getElementById('jPropiedad').value = job.propiedad||'';
+  document.getElementById('jDireccion').value = job.direccion||'';
+  document.getElementById('jCliente').value = job.cliente||'';
+  document.getElementById('jTelefono').value = job.telefono||'';
+  document.getElementById('jFecha').value = job.fecha||'';
+  document.getElementById('jHora').value = job.hora||'';
+  document.getElementById('jOperaria').value = job.operaria||'';
+  document.getElementById('jValor').value = job.valor||'';
+  document.getElementById('jEstado').value = job.estado||'pendiente';
+  document.getElementById('jNotas').value = job.notas||'';
+  onTipoClienteChange();
+  if (job.propiedad) onPropiedadChange();
+  document.getElementById('jobModal').classList.add('open');
+}
+
+function saveJob() {
+  const tipoCliente = document.getElementById('jTipoCliente').value;
+  const job = {
+    id: editingJobId || Date.now().toString(),
+    tipoCliente, tipoLimpieza: document.getElementById('jTipoLimpieza').value,
+    propiedad: tipoCliente==='airbnb' ? document.getElementById('jPropiedad').value : '',
+    direccion: tipoCliente==='externo' ? document.getElementById('jDireccion').value : '',
+    cliente: document.getElementById('jCliente').value, telefono: document.getElementById('jTelefono').value,
+    fecha: document.getElementById('jFecha').value, hora: document.getElementById('jHora').value,
+    operaria: document.getElementById('jOperaria').value, valor: parseCOP(document.getElementById('jValor').value),
+    estado: document.getElementById('jEstado').value, notas: document.getElementById('jNotas').value,
+    pagado: editingJobId ? (jobs.find(j=>j.id===editingJobId)?.pagado||false) : false,
+  };
+  if (editingJobId) { const idx = jobs.findIndex(j=>j.id===editingJobId); if (idx>=0) jobs[idx] = job; } else { jobs.push(job); }
+  saveData(); closeJobModal(); render();
+}
+
+function closeJobModal() { document.getElementById('jobModal').classList.remove('open'); editingJobId = null; }
+function quickComplete(id) { const job = jobs.find(j=>j.id===id); if (job) { job.estado='completado'; saveData(); render(); } }
+function deleteJob(id) { if (!confirm('¿Eliminar este servicio?')) return; jobs=jobs.filter(j=>j.id!==id); saveData(); render(); }
+function togglePago(id,val) { const job = jobs.find(j=>j.id===id); if (job) { job.pagado=val==='pagado'; saveData(); renderStats(); } }
+function updatePagoOperaria(nombre,valor) { pagosOperarias[nombre]=parseCOP(valor); saveData(); renderOperarias(); }
+function calcularQuincena() { const operarias=['Angie','Marlin','Sofia','Juanita','Laura','Yurani','Wilfer']; const now=new Date(); const r=operarias.map(op=>{const n=jobs.filter(j=>{const d=new Date(j.fecha+'T12:00:00');return j.operaria===op&&d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()&&j.estado==='completado';});return `${op}: ${n.length} servicios`;}).join('\n'); alert(`📊 Servicios completados este mes:\n\n${r}`); }
+function changeWeek(delta) { weekOffset+=delta; renderAgenda(); }
+
+function sendInstructions(id) {
+  const job = jobs.find(j=>j.id===id); if (!job) return;
+  const info = PROPIEDADES_ACCESO[job.propiedad];
+  if (!info) { alert('No hay instrucciones para esta propiedad.'); return; }
+  const msg = `🧹 *INSTRUCCIONES DE LIMPIEZA — SuperHost Loft*\n\n📅 Fecha: ${fmtDate(job.fecha)} ${job.hora||''}\n👤 Operaria: ${job.operaria||'—'}\n\n📍 *Dirección:*\n${info.direccion}\n\n🗺️ *Maps:* ${info.maps||'—'}\n\n🔑 *Acceso:*\n${info.acceso}\n`+(info.caja?`\n📦 *Código caja:* ${info.caja}\n`:'')+(info.lavadora?'\n🧺 *Lavadora/Secadora disponible*\n':'')+(info.notas?`\n⚠️ *Notas:*\n${info.notas}\n`:'')+`\n✅ Avisar al finalizar. Gracias! 🏠`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function enviarWhatsApp() {
+  const propiedad=document.getElementById('jPropiedad').value;
+  const operaria=document.getElementById('jOperaria').value;
+  const fecha=document.getElementById('jFecha').value;
+  const hora=document.getElementById('jHora').value;
+  const info=PROPIEDADES_ACCESO[propiedad]; if (!info) return;
+  const msg=`🧹 *INSTRUCCIONES DE LIMPIEZA — SuperHost Loft*\n\n📅 *Fecha:* ${fmtDate(fecha)} ${hora}\n`+(operaria?`👤 *Operaria:* ${operaria}\n`:'')+`\n📍 *Dirección:*\n${info.direccion}\n\n🗺️ *Maps:* ${info.maps||'—'}\n\n🔑 *Acceso:*\n${info.acceso}\n`+(info.caja?`\n📦 *Código caja:* ${info.caja}\n`:'')+(info.lavadora?'\n🧺 *Lavadora/Secadora disponible*\n':'')+(info.notas?`\n⚠️ *Notas:*\n${info.notas}\n`:'')+`\n✅ Avisar al finalizar. ¡Gracias! 🏠`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function showTab(tab) {
+  ['agenda','hoy','pagos-clientes','operarias','recordatorios','solicitudes'].forEach(t => {
+    document.getElementById(`view-${t}`).style.display = t===tab?'block':'none';
+    document.getElementById(`tab-${t}`).classList.toggle('active', t===tab);
+  });
+  if (tab==='pagos-clientes') renderPagosClientes();
+  if (tab==='operarias') renderOperarias();
+  if (tab==='recordatorios') renderRecordatorios();
+  if (tab==='solicitudes') cargarSolicitudes();
+}
+
+async function cargarSolicitudes() {
+  const lista = document.getElementById('solicitudesList');
+  lista.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text3)">Cargando...</div>';
+  try {
+    const res = await fetch(GAS_URL + '?action=getSolicitudes');
+    const data = await res.json();
+    if (!data.ok || !data.data || !data.data.length) {
+      lista.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text3);font-size:13px">No hay solicitudes aún.</div>`; return;
+    }
+    lista.innerHTML = data.data.map(s => `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px">
+      <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px">${s.nombre||'—'}</div>
+      <div style="font-size:12px;color:var(--text2)">${s.tipoServicio||''} · ${s.fecha||''} ${s.hora||''}</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:4px">${s.direccion||''} · ${s.telefono||''}</div>
+    </div>`).join('');
+  } catch(e) { lista.innerHTML = `<div style="text-align:center;padding:40px;color:var(--coral)">Error: ${e.message}</div>`; }
+}
+
+function exportPagos() {
+  let csv = 'Fecha,Propiedad/Cliente,Tipo,Operaria,Valor,Pagado\n';
+  jobs.filter(j=>j.valor>0).sort((a,b)=>b.fecha.localeCompare(a.fecha)).forEach(j => {
+    csv += `"${j.fecha}","${j.propiedad||j.cliente||''}","${getTipoLabel(j.tipoLimpieza)}","${j.operaria||''}","${j.valor}","${j.pagado?'Sí':'No'}"\n`;
+  });
+  const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='Pagos_Limpiezas_SHL.csv'; a.click();
+}
+
+const RENTAS_DIRECTAS = [
+  { apto:'Davinci 2005', huesped:'Ricardo Hernandez', tel:'3112049955', abono:'2026-03-19', canon:0, fechasAseo:[], fechaPagoMensual:19 },
+  { apto:'Gratamira 713', huesped:'Luis Duarte', tel:'3103082977', abono:'2026-03-24', canon:0, fechasAseo:[], fechaPagoMensual:24 },
+  { apto:'Boyacá 304', huesped:'Oscar Rojas', tel:'3192757188', abono:'2026-03-11', canon:1550000, fechasAseo:['2026-03-10','2026-03-24'], fechaPagoMensual:11 },
+  { apto:'Ventto 1210', huesped:'Diana Pino', tel:'3194492274', abono:'2026-03-16', canon:2200000, fechasAseo:[], fechaPagoMensual:16 },
+  { apto:'Boyacá 306', huesped:'Fabio Marins', tel:'3224204049', abono:'2026-04-04', canon:1450000, fechasAseo:[], fechaPagoMensual:4 },
+  { apto:'Boyacá 402', huesped:'Carolina Dorado', tel:'3007534077', abono:'2026-03-06', canon:1650000, fechasAseo:['2026-03-07','2026-03-21'], fechaPagoMensual:6 },
+  { apto:'Teleskop', huesped:'Mariana Echavarria', tel:'3135436604', abono:'2026-02-28', canon:3400000, fechasAseo:['2026-03-03','2026-03-17'], fechaPagoMensual:28 },
+];
+
+function calcularProximoPago(diaDelMes) {
+  const hoy = new Date(); let fecha = new Date(hoy.getFullYear(), hoy.getMonth(), diaDelMes);
+  if (fecha <= hoy) fecha = new Date(hoy.getFullYear(), hoy.getMonth()+1, diaDelMes);
+  return fecha;
+}
+function diasParaPago(diaDelMes) { const hoy=new Date(); hoy.setHours(0,0,0,0); const prox=calcularProximoPago(diaDelMes); return Math.ceil((prox-hoy)/(1000*60*60*24)); }
+function generarMensajeRecordatorio(r) {
+  const fechaStr=r.proximoPago.toLocaleDateString('es-CO',{day:'numeric',month:'long',year:'numeric'});
+  const nombre=r.huesped.split(' ')[0];
+  const canonStr=r.canon?`\n💰 Valor: $${r.canon.toLocaleString('es-CO')}`:'';
+  return `Hola ${nombre} 👋, te recordamos que el pago de tu arriendo en ${r.apto} vence el *${fechaStr}*.${canonStr}\n\nPor favor realiza el pago a tiempo.\n\nGracias 🏠\n— Diego Naranjo · SuperHost Loft`;
+}
+
+function renderRecordatorios() {
+  const hoy=new Date(); hoy.setHours(0,0,0,0);
+  const vencidos=[],urgentes=[],proximos=[],alDia=[];
+  RENTAS_DIRECTAS.forEach(r => {
+    if (!r.fechaPagoMensual) return;
+    const dias=diasParaPago(r.fechaPagoMensual); const prox=calcularProximoPago(r.fechaPagoMensual);
+    const entry={...r,dias,proximoPago:prox};
+    if (dias<0) vencidos.push(entry); else if (dias<=2) urgentes.push(entry); else if (dias<=7) proximos.push(entry); else alDia.push(entry);
+  });
+
+  const renderGrupo=(titulo,color,icono,items)=>{
+    if (!items.length) return '';
+    return `<div style="margin-bottom:20px"><div style="font-size:12px;text-transform:uppercase;letter-spacing:1px;color:${color};margin-bottom:10px;font-weight:600">${icono} ${titulo} (${items.length})</div>${items.map(r=>{
+      const fechaStr=r.proximoPago.toLocaleDateString('es-CO',{day:'numeric',month:'long',year:'numeric'});
+      const diasStr=r.dias<0?`Venció hace ${Math.abs(r.dias)} días`:r.dias===0?'Vence HOY':r.dias===1?'Vence mañana':`Vence en ${r.dias} días`;
+      const msg=generarMensajeRecordatorio(r);
+      const waUrl=`https://wa.me/57${r.tel.replace(/\s/g,'')}?text=${encodeURIComponent(msg)}`;
+      return `<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${color};border-radius:var(--radius);padding:16px 18px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <div><div style="font-size:14px;font-weight:600;color:var(--text)">${r.huesped}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">${r.apto} · Tel: ${r.tel}</div>
+        <div style="font-size:12px;margin-top:6px;color:${color};font-weight:500">${diasStr} · ${fechaStr}</div>
+        ${r.canon?`<div style="font-size:11px;color:var(--text3);margin-top:2px">Canon: $${r.canon.toLocaleString('es-CO')}</div>`:''}</div>
+        <a href="${waUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:#25d366;color:white;text-decoration:none;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;white-space:nowrap">📱 WhatsApp</a>
+      </div>`;
+    }).join('')}</div>`;
+  };
+
+  document.getElementById('recordatoriosList').innerHTML =
+    renderGrupo('VENCIDOS','var(--coral)','🚨',vencidos) +
+    renderGrupo('URGENTE — Vencen en 1-2 días','var(--amber)','⚠️',urgentes) +
+    renderGrupo('PRÓXIMOS — Esta semana','var(--teal)','📅',proximos) +
+    renderGrupo('AL DÍA','var(--green)','✅',alDia);
+}
+
+function generarRecordatoriosWhatsApp() {
+  const urgentes=RENTAS_DIRECTAS.filter(r=>r.fechaPagoMensual&&diasParaPago(r.fechaPagoMensual)<=2);
+  if (!urgentes.length) { alert('No hay recordatorios urgentes por enviar.'); return; }
+  urgentes.forEach((r,i) => { const prox=calcularProximoPago(r.fechaPagoMensual); const msg=generarMensajeRecordatorio({...r,proximoPago:prox}); setTimeout(()=>window.open(`https://wa.me/57${r.tel.replace(/\s/g,'')}?text=${encodeURIComponent(msg)}`,'_blank'),i*1500); });
+}
+
+function mapearPropiedad(n) {
+  n=n.toUpperCase();
+  if(n.includes('101')) return 'BlackLiving 101'; if(n.includes('202')) return 'BlackLiving 202'; if(n.includes('201')) return 'BlackLiving 201';
+  if(n.includes('PENTHOUSE')||n.includes('501')||n.includes('PH')) return 'Penthouse 501';
+  if(n.includes('302')) return 'BlackLiving 302'; if(n.includes('303')) return 'BlackLiving 303'; if(n.includes('304')) return 'BlackLiving 304';
+  if(n.includes('305')) return 'BlackLiving 305'; if(n.includes('306')) return 'BlackLiving 306';
+  if(n.includes('401')&&!n.includes('RODADERO')&&!n.includes('SANTA')) return 'BlackLiving 401';
+  if(n.includes('402')) return 'BlackLiving 402'; if(n.includes('403')) return 'BlackLiving 403'; if(n.includes('404')) return 'BlackLiving 404';
+  if(n.includes('405')) return 'BlackLiving 405'; if(n.includes('406')) return 'BlackLiving 406';
+  if(n.includes('RODADERO')||(n.includes('401')&&n.includes('SANTA'))) return 'Rodadero 401';
+  if(n.includes('SANTA MARINA')||n.includes('1410')) return 'Santa Marina 1410';
+  if(n.includes('33')||n.includes('TELESKOP')) return 'La 33-805';
+  if(n.includes('CANDELARIA')||n.includes('VENTTO')) return 'Candelaria 1210';
+  if(n.includes('COUNTRY')||n.includes('BOSQUE')) return 'Country 310';
+  if(n.includes('SANTA B')||n.includes('BARBARA')) return 'Santa Bárbara 205';
+  if(n.includes('ZC')||n.includes('ZONA')) return 'BlackLiving ZC';
+  return '';
+}
+
+const JOBS_AIRBNB = [
+  { huesped:'Alain Gabriel Garcia', airbnb:'IDEAL PARA FAMILIAS | CERCA AEROPUERTO Y EMBAJADA', checkout:'2025-07-18', codigo:'HMRD89D4MW' },
+  { huesped:'Jhoan Fuquen', airbnb:'LOFT MODERNO CERCA DEL AEROPUERTO Y EMBAJADA', checkout:'2025-07-04', codigo:'HMB8J4J4K5' },
+  { huesped:'Matthew Elliot Winne', airbnb:'SUITE FRENTE AL MAR CON JACUZZI', checkout:'2025-07-03', codigo:'HMNH2FB4SE' },
+  { huesped:'Francis Fernadez', airbnb:'ACOGEDOR Y ENCANTADOR LOFT CERCA AL AEROPUERTO 302', checkout:'2025-08-02', codigo:'HM432W9KRH' },
+  { huesped:'Jacqueline Sonntag', airbnb:'SUITE PREMIUM CON JACUZZI Y PLAYA CERCA AL TAYRONA', checkout:'2026-04-07', codigo:'HMKBDN5JHM' },
+];
+
+function importarDesdeGmail() {
+  let nuevos=0;
+  JOBS_AIRBNB.forEach(j=>{
+    const propiedad=mapearPropiedad(j.airbnb);
+    if(!jobs.some(job=>job.fecha===j.checkout&&job.propiedad===propiedad&&job.tipoCliente==='airbnb')){
+      jobs.push({id:'airbnb_'+j.codigo,tipoCliente:'airbnb',tipoLimpieza:'estandar',propiedad:propiedad||j.airbnb,direccion:'',cliente:j.huesped,telefono:'',fecha:j.checkout,hora:'11:00',operaria:'',valor:0,estado:'pendiente',notas:`Check-out ${j.huesped} · ${j.codigo}`,pagado:false,fromEmail:true});
+      nuevos++;
+    }
+  });
+  if(nuevos>0){saveData();render();alert(`✅ Se agendaron ${nuevos} limpiezas.`);}
+  else alert('Todos los aseos ya están en la agenda.');
+}
+
+function generarFechasAseo(abono,meses=3){const fechas=[];const base=new Date(abono+'T12:00:00');for(let i=1;i<=meses*2;i++){const f=new Date(base);f.setDate(f.getDate()+(15*i));fechas.push(f.toISOString().split('T')[0]);}return fechas;}
+
+function importarRentasDirectas(){
+  let nuevos=0;
+  RENTAS_DIRECTAS.forEach(r=>{
+    const propiedad=mapearPropiedad(r.apto)||r.apto;
+    const fechas=r.fechasAseo&&r.fechasAseo.length?r.fechasAseo:generarFechasAseo(r.abono,3);
+    fechas.forEach((fecha,idx)=>{
+      const id=`renta_${r.apto.replace(/\s/g,'')}_${fecha}`;
+      if(!jobs.some(j=>j.id===id)){
+        jobs.push({id,tipoCliente:'externo',tipoLimpieza:'estandar',propiedad,direccion:'',cliente:r.huesped,telefono:r.tel,fecha,hora:'10:00',operaria:'',valor:0,estado:'pendiente',notas:`Renta directa · Aseo ${idx+1}`,pagado:false,fromRenta:true});
+        nuevos++;
+      }
+    });
+  });
+  if(nuevos>0){saveData();render();alert(`✅ Se agendaron ${nuevos} aseos de rentas directas.`);}
+  else alert('Todos los aseos de rentas directas ya están agendados.');
+}
+
+function generarAseosZC(){
+  const diasZC=[2,4,6]; const hoy=new Date(); hoy.setHours(0,0,0,0); let nuevosZC=0;
+  for(let semana=0;semana<8;semana++){
+    diasZC.forEach(dia=>{
+      const fecha=new Date(hoy); const hoyDia=hoy.getDay(); let diff=dia-hoyDia; if(diff<0)diff+=7;
+      fecha.setDate(hoy.getDate()+diff+(semana*7));
+      const fechaStr=fecha.toISOString().split('T')[0]; const id=`zc_${fechaStr}`;
+      if(!jobs.some(j=>j.id===id)){
+        jobs.push({id,tipoCliente:'airbnb',tipoLimpieza:'estandar',propiedad:'BlackLiving ZC',direccion:'Cra 73 Bis #64A-67 · Zonas comunes',cliente:'',telefono:'',fecha:fechaStr,hora:'08:00',operaria:'',valor:0,estado:'pendiente',notas:'Zonas comunes BlackLiving · Recurrente',pagado:false,fromZC:true});
+        nuevosZC++;
+      }
+    });
+  }
+  return nuevosZC;
+}
+
+document.getElementById('jobModal').addEventListener('click', function(e){ if(e.target===this) closeJobModal(); });
+
+async function init(){
+  const today=new Date();
+  document.getElementById('todayBadge').textContent=today.toLocaleDateString('es-CO',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  await loadData();
+  populatePropiedades();
+  generarAseosZC();
+  render();
+}
+
+init();
+</script>
+</body>
+</html>
