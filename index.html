@@ -587,10 +587,10 @@ function renderOperarias() {
     const base = ['Angie','Marlin','Sofia','Juanita','Laura','Yurani','Wilfer'];
     try {
       const saved = JSON.parse(localStorage.getItem('shl_operarias') || '[]');
-      return base.map(n => {
-        const found = saved.find(o => o.nombre === n);
-        return { nombre: n, telefono: found ? found.telefono : '' };
-      });
+      // Si hay datos guardados, usarlos directamente (respeta agregar/eliminar)
+      if (saved.length > 0) return saved;
+      // Primera vez: usar el array base
+      return base.map(n => ({ nombre: n, telefono: '' }));
     } catch(e) { return base.map(n => ({ nombre: n, telefono: '' })); }
   }
   const operarias = cargarOperarias();
