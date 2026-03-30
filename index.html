@@ -320,6 +320,82 @@ header {
 </div>
 
 <script>
+
+// ═══════════════════════════════════════════════════════
+// MAPEO: Nombre del anuncio Airbnb → Número de Apto
+// ═══════════════════════════════════════════════════════
+const AIRBNB_APTO = {
+  // BlackLiving — Lofts
+  'Loft Moderno cerca a la Embajada y Aeropuerto 401': 'Apto 401',
+  'Acogedor loft cerca aeropuerto y embajada 402': 'Apto 402',
+  'Loft moderno a 15min del Aeropuerto El Dorado 403': 'Apto 403',
+  'Loft ideal para viajeros cerca al aeropuerto': 'Apto 404',
+  'Cómodo apto cerca embajada y aeropuerto - 405': 'Apto 405',
+  'Loft Privado cerca Aeropuerto-Embajada 406': 'Apto 406',
+  'Loft Moderno cerca al Aeropuerto y Embajada': 'Apto 301',
+  'Loft privado cerca aeropuerto El Dorado Bogotá DC': 'Apto 302',
+  'Loft cómodo/wifi/privado cerca aeropuerto 303': 'Apto 303',
+  'Loft cerca aeropuerto y embajada – WiFi 304': 'Apto 304',
+  'Práctico Loft ideal para escala cerca a Aeropuerto': 'Apto 305',
+  'Privado y Acogedor - Cerca Aeropuerto y Embajada': 'Apto 305',
+  'Perfecto Loft cerca Aeropuerto y Embajada 306': 'Apto 306',
+  // BlackLiving — Familiares
+  'Ideal grupo y familia, Cerca Aeropuerto y Embajada': 'Apto 101',
+  'Cerca del aeropuerto | Ideal familias & escalas': 'Apto 201',
+  'Apt 2H/2B para familia cerca Aeropuerto y Embajada': 'Apto 202',
+  'Apto 2H/2B para grupos cerca Aeropuerto y Embajada': 'Apto 202',
+  // BlackLiving — Penthouse
+  'PH- para familia Cerca del Aeropuerto & Embajada': 'Apto 501 PH',
+  // Bogotá otras
+  'Amplio apto ejecutivo en el Centro/estadías largas': 'La 33-805',
+  'Lujo y comodidad en el Centro Internacional': 'Museo 1309',
+  'Loft ideal con Vista a los Cerros en La Candelaria': 'Candelaria 1210',
+  'Suite en Santa Barbara ideal para ejecutivos': 'Santa Bárbara 205',
+  'Loft cerca a Clínica Bosque/Club Country/wifi': 'Country 310',
+  // Santa Marta
+  'El Rodadero 3Hab ideal para grupos o familia': 'Rodadero 401',
+  'Frente al mar/piscina tipo resort/balcón/Piso 14': 'Santa Marina 1410',
+  // Tayrona
+  'Suite en cabaña frente al mar cerca parque Tayrona': 'Suite Green',
+  'Suite en la playa, A/C y WiFi – Cerca al Tayrona': 'Suite Blue',
+  'Suites en la playa/grupos/wifi/AC/cerca al Tayrona': 'Beach Suites 2',
+  'Suite con Jacuzzi/playa/WiFi/AC/ cerca al Tayrona': 'Suite Jacuzzi',
+  'SUITE PREMIUM CON JACUZZI Y PLAYA CERCA AL TAYRONA': 'Suite Jacuzzi',
+  'SUITE FRENTE AL MAR CON JACUZZI': 'Suite Jacuzzi',
+  // Palomino
+  'Casa con piscina privada/wifi/salida a la playa': 'Casa La Sirena',
+  // Curití — Glamping
+  'Cabaña Hobbit en Castillo Medieval con Piscina': 'Hobbit 1',
+  'Cabaña Hobbit en castillo con piscina y jacuzzi': 'Hobbit 2',
+  'Cabaña rústica en Castillo con piscina y jacuzzi': 'Glamping 3',
+  'Cabaña romántica con jacuzzi y piscina en Castillo': 'El Naranjal',
+  'Cabaña romántica en castillo con piscina, jacuzzi': 'De Piedra',
+  'Escapada romántica en castillo con piscina': 'Torre 2',
+  'Refugio romántico con jacuzzi privado, cama king': 'El Cafetal',
+  // Genéricos por si el nombre viene en mayúsculas
+  'LOFT MODERNO CERCA DEL AEROPUERTO Y EMBAJADA': 'Apto BL',
+  'IDEAL PARA FAMILIAS | CERCA AEROPUERTO Y EMBAJADA': 'Apto 101/201/202',
+};
+
+// Helper para obtener el apto corto desde el nombre del anuncio
+function getAptoLabel(propiedad) {
+  if (!propiedad) return '';
+  // Buscar coincidencia exacta
+  if (AIRBNB_APTO[propiedad]) return AIRBNB_APTO[propiedad];
+  // Buscar coincidencia parcial (el nombre puede estar truncado)
+  const keys = Object.keys(AIRBNB_APTO);
+  for (const k of keys) {
+    if (propiedad.toLowerCase().includes(k.toLowerCase().substring(0,20)) ||
+        k.toLowerCase().includes(propiedad.toLowerCase().substring(0,20))) {
+      return AIRBNB_APTO[k];
+    }
+  }
+  // Buscar número de apto en el nombre directamente
+  const m = propiedad.match(/\b(\d{3})\b/);
+  if (m) return 'Apto ' + m[1];
+  return '';
+}
+
 const PROPIEDADES_ACCESO = {
   'BlackLiving ZC': { direccion: 'Cra 73 Bis #64A-67, Zonas comunes · Ed. BlackLiving, Engativá', maps: 'https://g.co/kgs/e2irUV', acceso: 'Portería da acceso. Llave maestra en administración.', caja: '', lavadora: false, notas: 'Incluye: lobby, escaleras, pasillos, zonas húmedas y parqueadero.' },
   'BlackLiving 301': { direccion: 'Cra 73 Bis #64A-67, Apto 301, Ed. BlackLiving, Engativá', maps: 'https://g.co/kgs/e2irUV', acceso: 'Cerradura digital TTLock en portón. Frotar mano en la parte superior para activar teclado.', caja: '3676', lavadora: true, notas: 'Dejar llave de emergencia en la cajita. Portería 24/7.' },
@@ -516,7 +592,11 @@ function renderJobCard(job) {
       <div style="font-size:10px;color:var(--text3)">${job.hora || '—'}</div>
     </div>
     <div>
-      <div class="job-address">${job.propiedad || job.direccion || '—'}</div>
+      <div class="job-address">${(() => {
+        const apto = getAptoLabel(job.propiedad);
+        const nombre = job.propiedad || job.direccion || '—';
+        return apto ? `<strong style="color:var(--lime)">${apto}</strong> · ${nombre}` : nombre;
+      })()}</div>
       <div class="job-client">${job.tipoCliente === 'airbnb' ? '🏠 Airbnb' : `👤 ${job.cliente || 'Cliente externo'}`}${job.notas ? ' · '+job.notas : ''}</div>
     </div>
     <div><span class="type-badge ${getTipoClass(job.tipoLimpieza)}">${getTipoLabel(job.tipoLimpieza)}</span></div>
