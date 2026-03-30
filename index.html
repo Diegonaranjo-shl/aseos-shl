@@ -204,7 +204,10 @@ header {
   <div id="view-operarias" style="display:none">
     <div class="agenda-header">
       <div class="section-title">Equipo de limpieza</div>
-      <button class="btn btn-lime" onclick="calcularQuincena()">💰 Calcular quincena</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-lime" onclick="calcularQuincena()">💰 Calcular quincena</button>
+        <button class="btn" style="background:var(--surface2);border:1px solid var(--border);color:var(--text2)" onclick="agregarOperaria()">+ Nueva operaria</button>
+      </div>
     </div>
     <div class="operarias-grid" id="operariasGrid"></div>
     <div class="pagos-grid" id="pagosOperariasGrid"></div>
@@ -613,6 +616,7 @@ function renderOperarias() {
           ${waLink ? `<a href="${waLink}" target="_blank" style="color:#25D366;font-size:20px;text-decoration:none;flex-shrink:0" title="Abrir WhatsApp">💬</a>` : ''}
         </div>
       </div>
+      <button onclick="eliminarOperaria('${nombre}')" style="margin-top:8px;width:100%;padding:7px;background:rgba(255,107,107,0.07);border:1px solid rgba(255,107,107,0.2);border-radius:8px;color:#ff6b6b;font-size:11px;cursor:pointer;font-family:inherit">🗑️ Eliminar del equipo</button>
     </div>`;
   }).join('');
   const totalQuincena = operarias.reduce((s,op)=>s+(pagosOperarias[op.nombre||op]||0),0);
@@ -716,6 +720,31 @@ function closeJobModal() { document.getElementById('jobModal').classList.remove(
 function quickComplete(id) { const job = jobs.find(j=>j.id===id); if (job) { job.estado='completado'; saveData(); render(); } }
 function deleteJob(id) { if (!confirm('¿Eliminar este servicio?')) return; jobs=jobs.filter(j=>j.id!==id); saveData(); render(); }
 function togglePago(id,val) { const job = jobs.find(j=>j.id===id); if (job) { job.pagado=val==='pagado'; saveData(); renderStats(); } }
+function agregarOperaria() {
+  const nombre = prompt('Nombre de la nueva operaria:');
+  if (!nombre || !nombre.trim()) return;
+  const n = nombre.trim();
+  try {
+    let saved = JSON.parse(localStorage.getItem('shl_operarias') || '[]');
+    if (!saved.length) saved = ['Angie','Marlin','Sofia','Juanita','Laura','Yurani','Wilfer'].map(x=>({nombre:x,telefono:''}));
+    if (saved.find(o=>o.nombre===n)) { alert('Ya existe una operaria con ese nombre.'); return; }
+    saved.push({nombre:n, telefono:''});
+    localStorage.setItem('shl_operarias', JSON.stringify(saved));
+    renderOperarias();
+  } catch(e) {}
+}
+
+function eliminarOperaria(nombre) {
+  if (!confirm('¿Eliminar a '+nombre+' del equipo? Sus aseos asignados no se borrarán.')) return;
+  try {
+    let saved = JSON.parse(localStorage.getItem('shl_operarias') || '[]');
+    if (!saved.length) saved = ['Angie','Marlin','Sofia','Juanita','Laura','Yurani','Wilfer'].map(x=>({nombre:x,telefono:''}));
+    saved = saved.filter(o=>o.nombre!==nombre);
+    localStorage.setItem('shl_operarias', JSON.stringify(saved));
+    renderOperarias();
+  } catch(e) {}
+}
+
 function guardarTelOperaria(nombre, tel) {
   try {
     let saved = JSON.parse(localStorage.getItem('shl_operarias') || '[]');
