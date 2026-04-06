@@ -156,7 +156,7 @@ header {
     <div id="syncStatus" style="display:flex;align-items:center;padding:0 12px;font-size:11px;color:var(--text3)">⏳ Cargando...</div>
     <button class="btn btn-outline" onclick="importarDesdeGmail()">📧 Importar Gmail</button>
     <button class="btn btn-outline" onclick="importarRentasDirectas()">🏠 Rentas directas</button>
-    <button class="btn btn-outline" onclick="window.open('https://solicitud-limpieza.netlify.app','_blank')">🌐 Formulario clientes</button>
+    <button class="btn btn-outline" onclick="window.open('https://diegonaranjo-shl.github.io/aseos-shl/solicitud.html','_blank')">🌐 Formulario clientes</button>
     <button class="btn btn-lime" onclick="openNewJob()">+ Nueva solicitud</button>
   </div>
 </header>
@@ -436,7 +436,7 @@ let editingJobId = null;
 // ═══════════════════════════════════════
 // ✅ URL ACTUALIZADA — Apps Script definitivo
 // ═══════════════════════════════════════
-const GAS_URL = '/.netlify/functions/sheets'; // Proxy local — sin CORS
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzzqZahro8LO68pe4QFKNtuWX8EerCqhwQmkQE-4-aUgu8YMi3Ye59DkLHSPWEiW63EvQ/exec'; // Proxy local — sin CORS
 
 let syncTimer = null;
 
@@ -500,7 +500,7 @@ async function loadData() {
 
   // ── 2. Actualizar desde Google Sheets CSV (sin CORS) ─────────────────
   // URL CSV pública — sin restricciones CORS, funciona en cualquier dispositivo
-  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQYZsChuajH7jRlrBWvh-lrFqkC8gGM3zx0ZQZLoIHSUEhMoH8OtvgbyG6k9wkF4HzR_Y875irF7lJF/pub?output=csv&gid=927180401&t=' + Date.now();
+  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQfVE2vnzeewHOK_aXKQU439p1wXIyuGVAKoD-YfSAzO8Mo2kPlLONUuQKC9Rs8QvQ_7RpdUQM8iV8t/pub?output=csv' + Date.now();
 
   try {
     const res = await fetch(CSV_URL);
